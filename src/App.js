@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { invoke } from "@tauri-apps/api/tauri";
+import "./App.css";
 
 function App() {
+  const [response, setResponse] = useState("");
+
+  const handleClick = async () => {
+    try {
+      const res = await invoke("handle_request");
+      setResponse(res);
+    } catch (err) {
+      console.error("Error invoking handle_request:", err);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button className="button" onClick={handleClick}>
+        Send Request
+      </button>
+      <p className="response">{response}</p>
     </div>
   );
 }
